@@ -1,4 +1,4 @@
-# codeworld-template
+# sokoban
 
 Шаблон проекта для локальной работы с CodeWorld.
 
