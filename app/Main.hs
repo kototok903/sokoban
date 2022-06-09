@@ -5,12 +5,16 @@ import Data.Text (pack)
 import CodeWorld
 
 data Direction = U | D | L | R
+  deriving Eq
 
 data Coord = Coord Integer Integer
+  deriving Eq
 
 data State = State Integer Coord Direction (List Coord)
+  deriving Eq
 
 data Tile = Blank | Wall | Ground | Storage | Box
+  deriving Eq
 
 initialState :: Integer -> State
 initialState 0 = initialStateL0
@@ -39,14 +43,11 @@ initialStateL0 = State 0 (Coord 0 (-1)) U initialBoxesL0
 
 initialBoxesL0 :: List Coord
 initialBoxesL0 =
-  Entry (Coord 1 0) (
-    Entry (Coord 0 0) (
-      Entry (Coord (-1) 0) (
-        Entry (Coord (-2) 0)
-          Empty
-      )
-    )
-  )
+  Coord 1 0 `Entry`
+  Coord 0 0 `Entry`
+  Coord (-1) 0 `Entry`
+  Coord (-2) 0 `Entry`
+  Empty
 
 mazeL0 :: Coord -> Tile
 mazeL0 (Coord x y)
@@ -61,10 +62,9 @@ initialStateL1 = State 1 (Coord (-2) 2) R initialBoxesL1
 
 initialBoxesL1 :: List Coord
 initialBoxesL1 =
-  Entry (Coord 0 1) (
-    Entry (Coord (-1) 1)
-      Empty
-  )
+  Coord 0 1 `Entry`
+  Coord (-1) 1 `Entry`
+  Empty
 
 mazeL1 :: Coord -> Tile
 mazeL1 (Coord x y)
@@ -81,22 +81,15 @@ initialStateL2 = State 2 (Coord 0 0) U initialBoxesL2
 
 initialBoxesL2 :: List Coord
 initialBoxesL2 =
-  Entry (Coord 1 1) (
-    Entry (Coord 0 1) (
-      Entry (Coord (-1) 1) (
-        Entry (Coord 1 0) (
-          Entry (Coord (-1) 0) (
-            Entry (Coord 1 (-1)) (
-              Entry (Coord 0 (-1)) (
-                Entry (Coord (-1) (-1))
-                  Empty
-              )
-            )
-          )
-        )
-      )
-    )
-  )
+  Coord 1 1 `Entry`
+  Coord 0 1 `Entry`
+  Coord (-1) 1 `Entry`
+  Coord 1 0 `Entry`
+  Coord (-1) 0 `Entry`
+  Coord 1 (-1) `Entry`
+  Coord 0 (-1) `Entry`
+  Coord (-1) (-1) `Entry`
+  Empty
 
 mazeL2 :: Coord -> Tile
 mazeL2 (Coord x y)
@@ -112,18 +105,13 @@ initialStateL3 = State 3 (Coord 0 0) D initialBoxesL3
 
 initialBoxesL3 :: List Coord
 initialBoxesL3 =
-  Entry (Coord 1 0) (
-    Entry (Coord (-1) 0) (
-      Entry (Coord 2 (-1)) (
-        Entry (Coord 3 (-1)) (
-          Entry (Coord (-2) (-1)) (
-            Entry (Coord (-3) (-1)) 
-              Empty
-          )
-        )
-      )
-    )
-  )
+  Coord 1 0 `Entry`
+  Coord (-1) 0 `Entry`
+  Coord 2 (-1) `Entry`
+  Coord 3 (-1) `Entry`
+  Coord (-2) (-1) `Entry`
+  Coord (-3) (-1) `Entry`
+  Empty
 
 mazeL3 :: Coord -> Tile
 mazeL3 (Coord x y)
@@ -140,26 +128,17 @@ initialStateL4 = State 4 (Coord (-2) 0) R initialBoxesL4
 
 initialBoxesL4 :: List Coord
 initialBoxesL4 =
-  Entry (Coord (-2) 3) (
-    Entry (Coord (-1) (-1)) (
-      Entry (Coord (-3) (-4)) (
-        Entry (Coord (-1) (-4)) (
-          Entry (Coord 1 1) (
-            Entry (Coord 1 3) (
-              Entry (Coord 3 0) (
-                Entry (Coord 3 1) (
-                  Entry (Coord 3 2) (
-                    Entry (Coord 3 3) 
-                      Empty
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )
+  Coord (-2) 3 `Entry`
+  Coord (-1) (-1) `Entry`
+  Coord (-3) (-4) `Entry`
+  Coord (-1) (-4) `Entry`
+  Coord 1 1 `Entry`
+  Coord 1 3 `Entry`
+  Coord 3 0 `Entry`
+  Coord 3 1 `Entry`
+  Coord 3 2 `Entry`
+  Coord 3 3 `Entry`
+  Empty
 
 mazeL4 :: Coord -> Tile
 mazeL4 (Coord x y)
@@ -184,26 +163,17 @@ initialStateL5 = State 5 (Coord (-2) 0) R initialBoxesL5
 
 initialBoxesL5 :: List Coord
 initialBoxesL5 =
-  Entry (Coord 0 2) (
-    Entry (Coord 1 2) (
-      Entry (Coord 2 2) (
-        Entry (Coord 3 2) (
-          Entry (Coord 0 1) (
-            Entry (Coord 0 (-1)) (
-              Entry (Coord 0 (-2)) (
-                Entry (Coord (-1) (-2)) (
-                  Entry (Coord (-2) (-2)) (
-                    Entry (Coord (-3) (-2)) 
-                      Empty
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )
+  Coord 0 2 `Entry`
+  Coord 1 2 `Entry`
+  Coord 2 2 `Entry`
+  Coord 3 2 `Entry`
+  Coord 0 1 `Entry`
+  Coord 0 (-1) `Entry`
+  Coord 0 (-2) `Entry`
+  Coord (-1) (-2) `Entry`
+  Coord (-2) (-2) `Entry`
+  Coord (-3) (-2) `Entry`
+  Empty
 
 mazeL5 :: Coord -> Tile
 mazeL5 (Coord x y)
@@ -223,16 +193,12 @@ initialStateL6 = State 6 (Coord 0 0) U initialBoxesL6
 
 initialBoxesL6 :: List Coord
 initialBoxesL6 =
-  Entry (Coord 6 1) (
-    Entry (Coord (-6) 1) (
-      Entry (Coord 1 2) (
-        Entry (Coord (-1) 2) (
-          Entry (Coord 0 (-3)) 
-            Empty
-        )
-      )
-    )
-  )
+  Coord 6 1 `Entry`
+  Coord (-6) 1 `Entry`
+  Coord 1 2 `Entry`
+  Coord (-1) 2 `Entry`
+  Coord 0 (-3) `Entry`
+  Empty
 
 mazeL6 :: Coord -> Tile
 mazeL6 (Coord x y)
@@ -256,38 +222,23 @@ initialStateLm1 = State (-1) (Coord 0 0) U initialBoxesLm1
 
 initialBoxesLm1 :: List Coord
 initialBoxesLm1 =
-  Entry (Coord 2 2) (
-    Entry (Coord 2 3) (
-      Entry (Coord 3 3) (
-        Entry (Coord 3 4) (
-          Entry (Coord (-2) 2) (
-            Entry (Coord (-2) 3) (
-              Entry (Coord (-3) 3) (
-                Entry (Coord (-3) 4) (
-                  Entry (Coord 2 (-2)) (
-                    Entry (Coord 2 (-3)) (
-                      Entry (Coord 3 (-3)) (
-                        Entry (Coord 3 (-4)) (
-                          Entry (Coord (-2) (-2)) (
-                            Entry (Coord (-2) (-3)) (
-                              Entry (Coord (-3) (-3)) (
-                                Entry (Coord (-3) (-4)) 
-                                  Empty
-                              )
-                            )
-                          )
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )
+  Coord 2 2 `Entry`
+  Coord 2 3 `Entry`
+  Coord 3 3 `Entry`
+  Coord 3 4 `Entry`
+  Coord (-2) 2 `Entry`
+  Coord (-2) 3 `Entry`
+  Coord (-3) 3 `Entry`
+  Coord (-3) 4 `Entry`
+  Coord 2 (-2) `Entry`
+  Coord 2 (-3) `Entry`
+  Coord 3 (-3) `Entry`
+  Coord 3 (-4) `Entry`
+  Coord (-2) (-2) `Entry`
+  Coord (-2) (-3) `Entry`
+  Coord (-3) (-3) `Entry`
+  Coord (-3) (-4) `Entry`
+  Empty
 
 mazeLm1 :: Coord -> Tile
 mazeLm1 (Coord x y)
@@ -362,19 +313,9 @@ drawMaze l (Coord x y)
   | x > right = drawMaze l (Coord left (y + 1))
   | otherwise = drawTileAt (Coord x y) (maze l (Coord x y)) & (drawMaze l (Coord (x + 1) y))
 
-compareTiles :: Tile -> Tile -> Bool
-compareTiles Wall Wall = True
-compareTiles Ground Ground = True
-compareTiles Box Box = True
-compareTiles Storage Storage = True
-compareTiles _ _ = False
-
-compareCoords :: Coord -> Coord -> Bool
-compareCoords (Coord x1 y1) (Coord x2 y2) 
-  | x1 == x2 && y1 == y2 = True
-  | otherwise = False
-
 data List a = Empty | Entry a (List a)
+  deriving Eq
+infixr `Entry`
 
 mapList :: (a -> b) -> List a -> List b
 mapList _ Empty = Empty
@@ -390,12 +331,12 @@ appendList (Entry x xs) list2 = Entry x (appendList xs list2)
 
 change :: Coord -> Coord -> List Coord -> List Coord
 change xOld xNew Empty = Empty
-change xOld xNew (Entry x xs) = if compareCoords x xOld 
+change xOld xNew (Entry x xs) = if x == xOld -- here
     then Entry xNew xs 
     else Entry x (change xOld xNew xs)
     
 find :: List Coord -> Coord -> Bool
-find xs xToFind = not (allList (mapList not (mapList (compareCoords xToFind) xs)))
+find xs xToFind = not (allList (mapList not (mapList (== xToFind) xs))) -- here
 
 allList :: List Bool -> Bool
 allList Empty = True
@@ -414,14 +355,10 @@ listElement list i = help list 0 i
 drawBoxes :: Integer -> List Coord -> Picture
 drawBoxes l boxes = combine (mapList drawBoxAt boxes)
   where
-    drawBoxAt boxCoord = (if checkStorage (maze l boxCoord) 
+    drawBoxAt boxCoord = (if (maze l boxCoord) == Storage -- here
         then atCoord boxCoord (colored (translucent green) (solidCircle 0.25)) 
         else blank) & 
         atCoord boxCoord (drawTile Box)
-    
-    checkStorage :: Tile -> Bool
-    checkStorage Storage = True
-    checkStorage t = False
 
 data Activity world = Activity world (Event -> world -> world) (world -> Picture)
 
@@ -429,9 +366,11 @@ resetable :: Activity State -> Activity State
 resetable (Activity is handle draw) = (Activity is handle' draw)
   where
     handle' (KeyPress "Esc") (State l coord d boxes) = initialState l
+    handle' (KeyPress "R") (State l coord d boxes) = initialState l
     handle' e s = handle e s
 
 data SSState world = StartScreen | Running world
+  deriving Eq
 
 startScreen :: Picture
 startScreen = scaled 3 3 (lettering "Sokoban") & 
@@ -454,22 +393,22 @@ winScreen = scaled 3 3 (lettering "You Won!") &
     translated 0 (-7) (lettering "Press L to select another level")
 
 boxesInStorages :: Integer -> List Coord -> Bool
-boxesInStorages l boxes = allList (mapList (compareTiles Storage) (mapList (maze l) boxes))
+boxesInStorages l boxes = allList (mapList (== Storage) (mapList (maze l) boxes)) -- here
 
 isWon :: State -> Bool
 isWon (State l coords d boxes)
   | boxesInStorages l boxes = True
-  | otherwise = False
+  | otherwise               = False
 
 withWin :: Activity State -> Activity State
 withWin (Activity initialState handle draw) = (Activity initialState handle' draw')
   where
     handle' e s
-      | isWon s = s
+      | isWon s   = s
       | otherwise = handle e s
     
     draw' s 
-      | isWon s = winScreen
+      | isWon s   = winScreen
       | otherwise = draw s
 
 levelSelectScreen :: Picture
@@ -480,6 +419,7 @@ levelSelectScreen = translated 0 8 (scaled 0.8 0.8 (lettering "Press H if you ne
     translated 0 (-8) (scaled 0.8 0.8 (lettering "Press L to open it again"))
 
 data LevelState world = LevelSelection | Game world
+  deriving Eq
 
 withLevels :: Activity State -> Activity (LevelState State)
 withLevels (Activity is handle draw) = (Activity is' handle' draw')
@@ -495,6 +435,9 @@ withLevels (Activity is handle draw) = (Activity is' handle' draw')
     handle' (KeyPress "6") LevelSelection = Game (initialState 6)
     handle' e LevelSelection = LevelSelection
     handle' (KeyPress "L") (Game s) = LevelSelection
+    handle' (KeyPress " ") (Game s) 
+      | isWon s   = LevelSelection
+      | otherwise = Game s
     handle' e (Game s) = Game (handle e s)
     
     draw' LevelSelection = levelSelectScreen
@@ -504,7 +447,7 @@ helpMain :: Integer -> Picture
 helpMain p = translated 0 8 (scaled 2 2 (lettering "Help")) & 
     translated 0 (-7) (scaled 0.8 0.8 (lettering (pack (concat ["Page ", (show p), "/3"])))) &
     translated 0 (-8) (scaled 0.8 0.8 (lettering "Press H to close Help screen")) & 
-    translated 9 0 (scaled 0.8 0.8 (rotated (pi / 2) (colored (translucent grey) (lettering "The game by Stas B"))))
+    translated 9 0 (scaled 0.8 0.8 (rotated (pi / 2) (colored (translucent grey) (lettering "The game by kototok903"))))
 
 helpScreen :: Integer -> Picture
 helpScreen 1 = helpPage1
@@ -525,11 +468,12 @@ helpScreen 3 = helpPage3
   where
     helpPage3 :: Picture
     helpPage3 = translated 0 5 (scaled 0.8 0.8 (lettering "The goal of Sokoban is to push Boxes")) & 
-        translated 0 4 (scaled 0.8 0.8 (lettering "using Player and get each of them to Storages")) &
+        translated 0 4 (scaled 0.8 0.8 (lettering "using Player and get each of them to Storages")) & 
         translated 0 2 (lettering "While playing:") & 
-        translated 0 0 (lettering "Use Arrow keys to move Player") & 
-        translated 0 (-1.5) (lettering "Press Escape to reset current level") & 
-        translated 0 (-3) (lettering "Press L to open Level Selection screen")
+        translated 0 0 (lettering "Use Arrow keys or WASD to move Player") & 
+        translated 0 (-1.5) (lettering "Press Escape or R to reset current level") & 
+        translated 0 (-3) (lettering "Press L to open Level Selection screen") & 
+        translated 0 (-4.5) (lettering "Press Z or U to undo your last move")
 helpScreen 0 = helpPage0
   where
     helpPage0 :: Picture
@@ -543,6 +487,7 @@ helpScreen (-1) = helpPagem1
 helpScreen p = blank
      
 data HelpState world = HelpOpened Integer world | HelpClosed Integer world
+  deriving Eq
 
 withHelp :: Activity (LevelState world) -> Activity (HelpState (LevelState world))
 withHelp (Activity is handle draw) = (Activity is' handle' draw')
@@ -561,9 +506,30 @@ withHelp (Activity is handle draw) = (Activity is' handle' draw')
     draw' (HelpOpened p _) = helpMain p & helpScreen p
     draw' (HelpClosed p s) = draw s
 
-data KCState world = KCProgress Integer world
+data UndoState world = UndoState world (List world)
+  deriving Eq
 
-withKC :: Activity (HelpState (LevelState State)) -> Activity (KCState (HelpState (LevelState State)))
+withUndo :: Eq world => Activity world -> Activity (UndoState world)
+withUndo (Activity is handle draw) = (Activity is' handle' draw')
+  where
+    is' = UndoState is Empty
+    
+    handle' (KeyPress "U") s = undo s
+    handle' (KeyPress "Z") s = undo s
+    handle' e olds@(UndoState s ss) = let news = handle e s in 
+      if news /= s
+      then UndoState (handle e s) (Entry s ss)
+      else olds
+    
+    undo s@(UndoState _ Empty) = s
+    undo (UndoState _ (Entry s ss)) = UndoState s ss
+    
+    draw' (UndoState s _) = draw s
+
+data KCState world = KCProgress Integer world
+  deriving Eq
+
+withKC :: Activity (UndoState (HelpState (LevelState State))) -> Activity (KCState (UndoState (HelpState (LevelState State))))
 withKC (Activity is handle draw) = (Activity is' handle' draw')
   where
     is' = KCProgress 0 is
@@ -579,8 +545,8 @@ withKC (Activity is handle draw) = (Activity is' handle' draw')
     handle' (KeyPress "B") (KCProgress 8 s) = KCProgress 9 s
     handle' (KeyPress "A") (KCProgress 9 s) = KCProgress 10 s
     handle' (KeyPress "Enter") (KCProgress 10 s) = KCProgress 11 s
-    handle' e (KCProgress 11 (HelpClosed p _)) = KCProgress 0 (HelpClosed p (Game (initialState (-1))))
-    handle' e (KCProgress 11 (HelpOpened p _)) = KCProgress 0 (HelpClosed p (Game (initialState (-1))))
+    handle' e (KCProgress 11 (UndoState (HelpClosed p _) ss)) = KCProgress 0 (UndoState (HelpClosed p (Game (initialState (-1)))) ss)
+    handle' e (KCProgress 11 (UndoState (HelpOpened p _) ss)) = KCProgress 0 (UndoState (HelpClosed p (Game (initialState (-1)))) ss)
     handle' e (KCProgress n s) = KCProgress n (handle e s)
     
     draw' (KCProgress n s) = draw s 
@@ -610,6 +576,10 @@ handle (KeyPress "Up") s = movePlayer U s
 handle (KeyPress "Down") s = movePlayer D s
 handle (KeyPress "Left") s = movePlayer L s
 handle (KeyPress "Right") s = movePlayer R s
+handle (KeyPress "W") s = movePlayer U s
+handle (KeyPress "A") s = movePlayer L s
+handle (KeyPress "S") s = movePlayer D s
+handle (KeyPress "D") s = movePlayer R s
 handle _ s = s
 
 draw :: State -> Picture
@@ -622,4 +592,4 @@ runActivity :: Activity world -> IO ()
 runActivity (Activity initialWorld handle draw) = activityOf initialWorld handle draw
 
 main :: IO ()
-main = runActivity (withStartScreen (withKC (withHelp (withLevels (resetable (withWin sokoban))))))
+main = runActivity (withStartScreen (withKC (withUndo (withHelp (withLevels (resetable (withWin sokoban)))))))

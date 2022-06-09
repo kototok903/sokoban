@@ -1,10 +1,12 @@
 # sokoban
 
-Шаблон проекта для локальной работы с CodeWorld.
+Puzzle game [Sokoban](https://en.wikipedia.org/wiki/Sokoban). Made in [Haskell](https://www.haskell.org/) using [CodeWorld](https://code.world/doc-haskell/CodeWorld.html) graphics library.
 
-Для работы нужно установить утилиту [GHCup](https://www.haskell.org/ghcup/), с помощью неё установить последнюю версию Cabal и GHC 8.10.
+### Dependencies
+- Cabal (latest version);
+- GHC 8.10.
 
-Команда `cabal build` собирает проект, `cabal run` запускает приложение CodeWorld, которое после запуска доступно по адресу http://localhost:3000/.
+You can install both of Cabal and GHC using [GHCup](https://www.haskell.org/ghcup/) utility.
 
-Для удобства можно установить утилиту [entr](https://github.com/eradman/entr) (`brew install entr`, `sudo apt install entr`, `sudo pacman -S entr`),
-и запускать приложение командой `find app -name '*.hs' | entr -r cabal run`, тогда оно будет автоматически перезапускаться при изменении кода.
+### Compiling
+Use `cabal build` to build the project and `cabal run` to start the CodeWorld app, that you can see at http://localhost:3000/.
