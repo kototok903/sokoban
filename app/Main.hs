@@ -344,7 +344,8 @@ allList (Entry False bs) = False
 allList (Entry True bs) = allList bs
 
 listElement :: List a -> Integer -> a
-listElement list i = help list 0 
+listElement list i = help list 0 i
+  where
     help :: List a -> Integer -> Integer -> a
     help (Entry x Empty) j i = x
     help (Entry x xs) j i 
@@ -352,7 +353,8 @@ listElement list i = help list 0
       | otherwise = help xs (j + 1) i
 
 drawBoxes :: Integer -> List Coord -> Picture
-drawBoxes l boxes = combine (mapList drawBoxAt boxes
+drawBoxes l boxes = combine (mapList drawBoxAt boxes)
+  where
     drawBoxAt boxCoord = (if (maze l boxCoord) == Storage
         then atCoord boxCoord (colored (translucent green) (solidCircle 0.25)) 
         else blank) & 
@@ -361,7 +363,8 @@ drawBoxes l boxes = combine (mapList drawBoxAt boxes
 data Activity world = Activity world (Event -> world -> world) (world -> Picture)
 
 resetable :: Activity State -> Activity State
-resetable (Activity is handle draw) = (Activity is handle' draw
+resetable (Activity is handle draw) = (Activity is handle' draw)
+  where
     handle' (KeyPress "Esc") (State l coord d boxes) = initialState l
     handle' (KeyPress "R") (State l coord d boxes) = initialState l
     handle' e s = handle e s
@@ -374,7 +377,8 @@ startScreen = scaled 3 3 (lettering "Sokoban") &
     translated 0 (-7) (lettering "Press space to start")
 
 withStartScreen :: Activity world -> Activity (SSState world)
-withStartScreen (Activity initialWorld handle draw) = (Activity initialWorld' handle' draw'
+withStartScreen (Activity initialWorld handle draw) = (Activity initialWorld' handle' draw')
+  where
     initialWorld' = StartScreen
     
     handle' (KeyPress " ") StartScreen = Running initialWorld
@@ -397,7 +401,8 @@ isWon (State l coords d boxes)
   | otherwise               = False
 
 withWin :: Activity State -> Activity State
-withWin (Activity initialState handle draw) = (Activity initialState handle' draw'
+withWin (Activity initialState handle draw) = (Activity initialState handle' draw')
+  where
     handle' e s
       | isWon s   = s
       | otherwise = handle e s
@@ -417,7 +422,8 @@ data LevelState world = LevelSelection | Game world
   deriving Eq
 
 withLevels :: Activity State -> Activity (LevelState State)
-withLevels (Activity is handle draw) = (Activity is' handle' draw'
+withLevels (Activity is handle draw) = (Activity is' handle' draw')
+  where
     is' = LevelSelection
     
     handle' (KeyPress "0") LevelSelection = Game (initialState 0)
@@ -444,19 +450,22 @@ helpMain p = translated 0 8 (scaled 2 2 (lettering "Help")) &
     translated 9 0 (scaled 0.8 0.8 (rotated (pi / 2) (colored (translucent grey) (lettering "The game by kototok903"))))
 
 helpScreen :: Integer -> Picture
-helpScreen 1 = helpPage
+helpScreen 1 = helpPage1
+  where
     helpPage1 :: Picture
     helpPage1 = translated 0 4 (lettering "It is Help screen") & 
         translated 0 2 (lettering "If you open it while playing,") & 
         translated 0 0.5 (lettering "it won't reset your moves") & 
         translated 0 (-1.5) (lettering "Use Right and Left arrow keys") &
         translated 0 (-3) (lettering "to turn pages") 
-helpScreen 2 = helpPage
+helpScreen 2 = helpPage2
+  where
     helpPage2 :: Picture
     helpPage2 = translated 0 2.5 (lettering "On Level Selection screen:") & 
         translated 0 0.5 (lettering "Press on the level number key (0 - 6)") & 
         translated 0 (-1) (lettering "to start the level with that number")
-helpScreen 3 = helpPage
+helpScreen 3 = helpPage3
+  where
     helpPage3 :: Picture
     helpPage3 = translated 0 5 (scaled 0.8 0.8 (lettering "The goal of Sokoban is to push Boxes")) & 
         translated 0 4 (scaled 0.8 0.8 (lettering "using Player and get each of them to Storages")) & 
@@ -465,11 +474,13 @@ helpScreen 3 = helpPage
         translated 0 (-1.5) (lettering "Press Escape or R to reset current level") & 
         translated 0 (-3) (lettering "Press L to open Level Selection screen") & 
         translated 0 (-4.5) (lettering "Press Z or U to undo your last move")
-helpScreen 0 = helpPage
+helpScreen 0 = helpPage0
+  where
     helpPage0 :: Picture
     helpPage0 = translated 0 1 (lettering "Fun fact:") &
         translated 0 (-0.5) (lettering "Level 6 is shaped like a fly")
-helpScreen (-1) = helpPagem
+helpScreen (-1) = helpPagem1
+  where
     helpPagem1 :: Picture
     helpPagem1 = translated 0 0.5 (lettering "Have you heard about Konami Code?") & 
         translated 0 (-1) (scaled 0.8 0.8 (lettering "(Enter — Start)"))
@@ -479,7 +490,8 @@ data HelpState world = HelpOpened Integer world | HelpClosed Integer world
   deriving Eq
 
 withHelp :: Activity (LevelState world) -> Activity (HelpState (LevelState world))
-withHelp (Activity is handle draw) = (Activity is' handle' draw'
+withHelp (Activity is handle draw) = (Activity is' handle' draw')
+  where
     is' = HelpClosed 1 is
     
     handle' (KeyPress "H") (HelpClosed p s) = HelpOpened p s
@@ -498,7 +510,8 @@ data UndoState world = UndoState world (List world)
   deriving Eq
 
 withUndo :: Eq world => Activity world -> Activity (UndoState world)
-withUndo (Activity is handle draw) = (Activity is' handle' draw'
+withUndo (Activity is handle draw) = (Activity is' handle' draw')
+  where
     is' = UndoState is Empty
     
     handle' (KeyPress "U") s = undo s
@@ -517,7 +530,8 @@ data KCState world = KCProgress Integer world
   deriving Eq
 
 withKC :: Activity (UndoState (HelpState (LevelState State))) -> Activity (KCState (UndoState (HelpState (LevelState State))))
-withKC (Activity is handle draw) = (Activity is' handle' draw'
+withKC (Activity is handle draw) = (Activity is' handle' draw')
+  where
     is' = KCProgress 0 is
     
     handle' e@(KeyPress "Up") (KCProgress 0 s) = KCProgress 1 (handle e s)
@@ -551,6 +565,7 @@ movePlayer d (State l (Coord x y) _ boxes)
     (change (moveCoord d (Coord x y)) (moveCoord d (moveCoord d (Coord x y))) boxes)
   | isEmpty (maze l (moveCoord d (Coord x y))) = State l (moveCoord d (Coord x y)) d boxes
   | otherwise = State l (Coord x y) d boxes
+    where
       isEmpty :: Tile -> Bool
       isEmpty Ground = True
       isEmpty Storage = True
