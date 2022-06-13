@@ -2,7 +2,7 @@ cabal-version:      2.4
 name:               sokoban
 version:            0.1.0.0
 
-executable codeworld-template
+executable sokoban
     main-is:          Main.hs
     build-depends:    base
                     , codeworld-api ^>=0.7.0

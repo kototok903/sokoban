@@ -4,6 +4,8 @@ import Data.Text (pack)
 
 import CodeWorld
 
+import List
+
 data Direction = U | D | L | R
   deriving Eq
 
@@ -313,44 +315,9 @@ drawMaze l (Coord x y)
   | x > right = drawMaze l (Coord left (y + 1))
   | otherwise = drawTileAt (Coord x y) (maze l (Coord x y)) & (drawMaze l (Coord (x + 1) y))
 
-data List a = Empty | Entry a (List a)
-  deriving Eq
-infixr `Entry`
-
-mapList :: (a -> b) -> List a -> List b
-mapList _ Empty = Empty
-mapList f (Entry x xs) = Entry (f x) (mapList f xs)
-
 combine :: List Picture -> Picture
 combine Empty = blank
 combine (Entry x xs) = x & combine xs
-
-appendList :: List a -> List a -> List a
-appendList Empty list2 = list2
-appendList (Entry x xs) list2 = Entry x (appendList xs list2)
-
-change :: Coord -> Coord -> List Coord -> List Coord
-change xOld xNew Empty = Empty
-change xOld xNew (Entry x xs) = if x == xOld
-    then Entry xNew xs 
-    else Entry x (change xOld xNew xs)
-    
-find :: List Coord -> Coord -> Bool
-find xs xToFind = not (allList (mapList not (mapList (== xToFind) xs)))
-
-allList :: List Bool -> Bool
-allList Empty = True
-allList (Entry False bs) = False
-allList (Entry True bs) = allList bs
-
-listElement :: List a -> Integer -> a
-listElement list i = help list 0 i
-  where
-    help :: List a -> Integer -> Integer -> a
-    help (Entry x Empty) j i = x
-    help (Entry x xs) j i 
-      | j == i = x
-      | otherwise = help xs (j + 1) i
 
 drawBoxes :: Integer -> List Coord -> Picture
 drawBoxes l boxes = combine (mapList drawBoxAt boxes)
